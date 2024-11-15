@@ -14,6 +14,7 @@ func main() {
 	flag.Parse()
 
 	http.Handle("/", http.FileServer(http.Dir("../frontend")))
+	http.HandleFunc()
 
 	log.Printf("Web Server listening on http://localhost:%d", port)
 	if err := http.ListenAndServe(fmt.Sprintf(":%d", port), nil); err != nil {
