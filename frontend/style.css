@@ -90,12 +90,12 @@ body {
 }
 
 .message.received .timestamp {
-    align-self: flex-start; /* Timestamp linksbündig bei empfangenen Nachrichten */
+    align-self: flex-start;
     margin-left: 10px;
 }
 
 .message.sent .timestamp {
-    align-self: flex-end; /* Timestamp rechtsbündig bei gesendeten Nachrichten */
+    align-self: flex-end;
     margin-right: 10px;
 }
 

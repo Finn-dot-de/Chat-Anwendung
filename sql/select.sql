@@ -1,18 +1,11 @@
 SELECT 
     m.message_id,
-    u1.username AS sender,
-    u2.username AS receiver,
+    u.username AS sender,
     m.content,
-    m.timestamp,
-    m.is_read
+    m.timestamp
 FROM 
     messages m
 JOIN 
-    users u1 ON m.sender_id = u1.user_id
-JOIN 
-    users u2 ON m.receiver_id = u2.user_id
-WHERE 
-    (m.sender_id = 1 AND m.receiver_id = 2)
-    OR (m.sender_id = 2 AND m.receiver_id = 1)
+    users u ON m.sender_id = u.user_id
 ORDER BY 
     m.timestamp;
