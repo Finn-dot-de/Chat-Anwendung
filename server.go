@@ -40,8 +40,11 @@ func main() {
 	flag.Parse()
 
 	http.Handle("/", http.FileServer(http.Dir("./frontend")))
-	http.HandleFunc("POST /api/newmessage", HandleNewMessage)
-	http.HandleFunc("POST /api/newmessage", HandleNewMessage)
+	http.HandleFunc("POST /api/user", HandleCreateUser)
+	http.HandleFunc("POST /api/new/message", HandleCreateMessage)
+	http.HandleFunc("GET /api/get/message", HandleGetMessages)
+	http.HandleFunc("GET /api/login", HandleLogin)
+	http.HandleFunc("GET /api/events", HandleEvents)
 
 	log.Printf("Web Server listening on http://localhost:%d", port)
 	if err := http.ListenAndServe(fmt.Sprintf(":%d", port), nil); err != nil {

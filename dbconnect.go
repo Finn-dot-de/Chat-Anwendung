@@ -7,46 +7,44 @@ import (
 	"time"
 
 	_ "github.com/lib/pq"
+	"golang.org/x/crypto/bcrypt"
 )
 
-// ConnectToDB stellt eine Verbindung zur Datenbank her und gibt diese zurück.
+// ConnectToDB stellt eine Verbindung zur Datenbank her und gibt sie zurück.
 func ConnectToDB() (*sql.DB, error) {
-	// Laden der Umgebungsvariablen.
 	host := os.Getenv("POSTGRES_HOST")
 	port := os.Getenv("POSTGRES_PORT")
 	user := os.Getenv("POSTGRES_USER")
 	password := os.Getenv("POSTGRES_PASSWORD")
 	dbname := os.Getenv("POSTGRES_DB")
 
-	// Erstellen der Verbindungszeichenkette.
-	psqlInfo := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
-		host, port, user, password, dbname)
+	// Verbindungszeichenkette erstellen
+	psqlInfo := fmt.Sprintf(
+		"host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
+		host, port, user, password, dbname,
+	)
 
-	// Versuch, eine Verbindung zur Datenbank herzustellen.
 	db, err := sql.Open("postgres", psqlInfo)
 	if err != nil {
 		return nil, err
 	}
 
-	// Versuch, die Datenbank anzupingen, um die Verbindung zu testen.
-	err = db.Ping()
-	if err != nil {
+	if err := db.Ping(); err != nil {
 		return nil, err
 	}
 
-	// Wenn die Verbindung erfolgreich hergestellt wurde, wird eine Erfolgsmeldung gedruckt.
-	fmt.Println("Successfully connected!")
-
-	// Gibt die Datenbankverbindung und nil für den Fehler zurück.
+	fmt.Println("Erfolgreich mit der Datenbank verbunden!")
 	return db, nil
 }
 
+// InsertMessage fügt eine neue Nachricht in die Datenbank ein.
 func InsertMessage(msg Message) error {
 	query := `INSERT INTO messages (sender_id, content, timestamp) VALUES ($1, $2, $3)`
 	_, err := db.Exec(query, msg.SenderID, msg.Content, time.Now())
 	return err
 }
 
+// GetMessages holt Nachrichten aus der Datenbank.
 func GetMessages() ([]Message, error) {
 	query := `SELECT sender_id, content, timestamp FROM messages ORDER BY timestamp DESC`
 	rows, err := db.Query(query)
@@ -58,8 +56,7 @@ func GetMessages() ([]Message, error) {
 	var messages []Message
 	for rows.Next() {
 		var msg Message
-		err := rows.Scan(&msg.SenderID, &msg.Content, &msg.Timestamp)
-		if err != nil {
+		if err := rows.Scan(&msg.SenderID, &msg.Content, &msg.Timestamp); err != nil {
 			return nil, err
 		}
 		messages = append(messages, msg)
@@ -69,7 +66,29 @@ func GetMessages() ([]Message, error) {
 }
 
 func InsertUser(user User) error {
+	// Passwort hashen
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return fmt.Errorf("fehler beim Hashen des Passworts: %v", err)
+	}
+
 	query := `INSERT INTO users (username, password) VALUES ($1, $2)`
-	_, err := db.Exec(query, user.Username, user.Password)
+	_, err = db.Exec(query, user.Username, string(hashedPassword))
 	return err
+}
+
+// Funktion zum Überprüfen eines Passworts
+func ValidateUser(username, password string) (bool, error) {
+	var hashedPassword string
+	query := `SELECT password FROM users WHERE username = $1`
+	err := db.QueryRow(query, username).Scan(&hashedPassword)
+	if err != nil {
+		return false, err
+	}
+
+	// Passwort validieren
+	if err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password)); err != nil {
+		return false, nil
+	}
+	return true, nil
 }

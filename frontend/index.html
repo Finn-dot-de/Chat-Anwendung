@@ -7,25 +7,32 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="chat-container">
+    <div id="username-container">
+        <h2>Registrieren</h2>
+        <input type="text" id="username-input" placeholder="Dein Name">
+        <input type="password" id="password-input" placeholder="Passwort">
+        <button id="username-submit">Registrieren</button>
+    </div>
+    
+    <div id="login-container" style="display: none;">
+        <h2>Login</h2>
+        <input type="text" id="login-username" placeholder="Dein Name">
+        <input type="password" id="login-password" placeholder="Passwort">
+        <button id="login-submit">Login</button>
+    </div>
+    
+
+    <div class="chat-container" style="display: none;">
         <div class="chat-header">
             <h1>Chat</h1>
         </div>
-        <div class="chat-messages" id="chat-messages">
-            <div class="message received">
-                <p>Hallo! Wie kann ich dir helfen?</p>
-                <span class="timestamp">10:30</span>
-            </div>
-            <div class="message sent">
-                <p>Hi! Kannst du mir bei etwas helfen?</p>
-                <span class="timestamp">10:31</span>
-            </div>
-        </div>
+        <div class="chat-messages" id="chat-messages"></div>
         <div class="chat-input">
             <input type="text" placeholder="Nachricht eingeben..." id="chat-input">
             <button id="send-button">Senden</button>
         </div>
     </div>
+
     <script type="module" src="script.js"></script>
 </body>
 </html>
