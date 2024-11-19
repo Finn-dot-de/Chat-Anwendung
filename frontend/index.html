@@ -7,21 +7,31 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="username-container">
+    <div id="registrierungs-container" class="active">
         <h2>Registrieren</h2>
-        <input type="text" id="username-input" placeholder="Dein Name">
-        <input type="password" id="password-input" placeholder="Passwort">
+        <label for="username-input">Benutzername</label>
+        <input type="text" id="username-input" name="username-input" placeholder="Dein Name">
+        <label for="password-input">Passwort</label>
+        <input type="password" id="password-input" name="password-input" placeholder="Passwort">
         <button id="username-submit">Registrieren</button>
+        <p class="switch-form">
+            Hast du schon einen Account? <a id="switch-to-login">Zum Login</a>
+        </p>
     </div>
     
-    <div id="login-container" style="display: none;">
+    <div id="login-container">
         <h2>Login</h2>
+        <label for="login-username">Benutzername</label>
         <input type="text" id="login-username" placeholder="Dein Name">
+        <label for="login-password">Passwort</label>
         <input type="password" id="login-password" placeholder="Passwort">
         <button id="login-submit">Login</button>
+        <p class="switch-form">
+            Noch keinen Account? <a id="switch-to-register">Registrieren</a>
+        </p>
     </div>
     
-
+    
     <div class="chat-container" style="display: none;">
         <div class="chat-header">
             <h1>Chat</h1>

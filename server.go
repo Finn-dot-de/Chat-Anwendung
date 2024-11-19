@@ -22,32 +22,35 @@ func main() {
 		log.Fatalf("Fehler beim Laden der .env-Datei: %v", err)
 	}
 
-	// Verbindung zur Datenbank herstellen
-	db, err := ConnectToDB()
+	db, err = ConnectToDB()
 	if err != nil {
 		log.Fatalf("Fehler beim Verbinden mit der Datenbank: %v", err)
 	}
 
 	// Schließt die Datenbankverbindung bei Programmende
-	defer func(db *sql.DB) {
-		err := db.Close()
-		if err != nil {
+	defer func() {
+		if err := db.Close(); err != nil {
 			log.Fatalln("Fehler beim Schließen der DB:", err)
 		}
-	}(db)
+	}()
 
 	flag.IntVar(&port, "port", 8080, "port to listen on")
 	flag.Parse()
 
-	http.Handle("/", http.FileServer(http.Dir("./frontend")))
-	http.HandleFunc("POST /api/user", HandleCreateUser)
-	http.HandleFunc("POST /api/new/message", HandleCreateMessage)
-	http.HandleFunc("GET /api/get/message", HandleGetMessages)
-	http.HandleFunc("GET /api/login", HandleLogin)
-	http.HandleFunc("GET /api/events", HandleEvents)
+	// Mux erstellen und Routen registrieren
+	mux := http.NewServeMux()
+	mux.Handle("/", http.FileServer(http.Dir("./frontend")))
+	mux.HandleFunc("POST /api/create/user", HandleCreateUser)
+	mux.HandleFunc("POST /api/new/message", HandleCreateMessage)
+	mux.HandleFunc("GET /api/get/message", HandleGetMessages)
+	mux.HandleFunc("POST /api/login", HandleLogin)
+	mux.HandleFunc("GET /api/events", HandleEvents)
+
+	// Logging-Middleware anwenden
+	loggedMux := LoggerMiddleware(mux)
 
 	log.Printf("Web Server listening on http://localhost:%d", port)
-	if err := http.ListenAndServe(fmt.Sprintf(":%d", port), nil); err != nil {
+	if err := http.ListenAndServe(fmt.Sprintf(":%d", port), loggedMux); err != nil {
 		log.Fatal(err)
 	}
 }

@@ -7,102 +7,103 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
+    flex-direction: column;
     box-sizing: border-box;
+}
+
+/* Container-Design */
+#registrierungs-container, #login-container, .chat-container {
+    width: 90%;
+    max-width: 400px;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+}
+
+/* Input-Felder */
+input[type="text"], input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+/* Buttons */
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Umschalt-Link */
+.switch-form {
+    font-size: 14px;
+    color: #555;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.switch-form a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.switch-form a:hover {
+    text-decoration: underline;
 }
 
 /* Chat-Container */
 .chat-container {
-    width: 90%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
     max-width: 600px;
     height: 80%;
     max-height: 800px;
-    background-color: #fff;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    display: flex;
-    flex-direction: column;
     overflow: hidden;
-    box-sizing: border-box;
 }
 
-/* Header */
 .chat-header {
     background-color: #007bff;
     color: white;
-    padding: 20px;
+    padding: 15px;
     text-align: center;
     font-size: 1.5rem;
     font-weight: bold;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-/* Nachrichtenbereich */
 .chat-messages {
     flex: 1;
-    padding: 20px;
+    padding: 10px;
     overflow-y: auto;
     background-color: #f9f9f9;
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 10px;
     box-sizing: border-box;
 }
 
-/* Einzelne Nachrichten */
-.message {
-    display: flex;
-    flex-direction: column;
-    max-width: 75%;
-    word-wrap: break-word;
-    position: relative;
-}
-
-.message p {
-    margin: 0;
-    padding: 15px;
-    border-radius: 12px;
-    font-size: 1rem;
-}
-
-.message.received {
-    align-self: flex-start;
-}
-
-.message.received p {
-    background-color: #e4e6eb;
-}
-
-.message.sent {
-    align-self: flex-end;
-}
-
-.message.sent p {
-    background-color: #007bff;
-    color: white;
-}
-
-/* Zeitstempel */
-.timestamp {
-    font-size: 0.8rem;
-    color: #888;
-    margin-top: 5px;
-}
-
-.message.received .timestamp {
-    align-self: flex-start;
-    margin-left: 10px;
-}
-
-.message.sent .timestamp {
-    align-self: flex-end;
-    margin-right: 10px;
-}
-
-/* Eingabebereich */
 .chat-input {
     display: flex;
-    padding: 15px;
+    padding: 10px;
     border-top: 1px solid #ddd;
     background-color: #fff;
     gap: 10px;
@@ -111,7 +112,7 @@ body {
 
 .chat-input input {
     flex: 1;
-    padding: 15px;
+    padding: 10px;
     border: 1px solid #ddd;
     border-radius: 8px;
     font-size: 1rem;
@@ -119,7 +120,7 @@ body {
 }
 
 .chat-input button {
-    padding: 15px 20px;
+    padding: 10px 15px;
     border: none;
     border-radius: 8px;
     background-color: #007bff;
@@ -133,39 +134,64 @@ body {
     background-color: #0056b3;
 }
 
-/* Responsive Design */
+/* Media Queries für kleinere Bildschirme */
 @media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+
+    #registrierungs-container, #login-container, .chat-container {
+        width: 100%;
+        padding: 15px;
+        box-shadow: none;
+        border-radius: 5px;
+    }
+
     .chat-header {
         font-size: 1.2rem;
-        padding: 15px;
+        padding: 10px;
     }
 
-    .chat-input input,
-    .chat-input button {
-        padding: 10px;
-        font-size: 0.9rem;
+    input[type="text"], input[type="password"], .chat-input input {
+        padding: 8px;
+        font-size: 14px;
     }
 
-    .chat-messages {
-        padding: 10px;
+    button {
+        padding: 8px 15px;
+        font-size: 14px;
     }
 }
 
+/* Media Queries für sehr kleine Bildschirme (Handys im Hochformat) */
 @media (max-width: 480px) {
-    .chat-container {
+    #registrierungs-container, #login-container, .chat-container {
         width: 100%;
-        height: 100%;
+        height: auto;
         border-radius: 0;
-        max-height: none;
+        padding: 10px;
     }
 
     .chat-header {
         font-size: 1rem;
+        padding: 8px;
     }
 
-    .chat-input input,
-    .chat-input button {
-        padding: 8px;
-        font-size: 0.8rem;
+    input[type="text"], input[type="password"], .chat-input input {
+        padding: 6px;
+        font-size: 12px;
     }
+
+    button {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+
+    .chat-messages {
+        padding: 5px;
+    }
+}
+
+a {
+    cursor: pointer;
 }
