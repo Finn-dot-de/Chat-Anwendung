@@ -11,8 +11,8 @@ CREATE TABLE IF NOT EXISTS users (
 
 -- Tabelle für Nachrichten
 CREATE TABLE IF NOT EXISTS messages (
-    message_id SERIAL PRIMARY KEY,
-    sender_id INT REFERENCES users(user_id) ON DELETE CASCADE,
+    id SERIAL PRIMARY KEY,
+    sender_id INT REFERENCES users(id) ON DELETE CASCADE,
     content TEXT NOT NULL,
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

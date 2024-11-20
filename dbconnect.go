@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"log"
 	"os"
 	"time"
 
@@ -39,6 +40,7 @@ func ConnectToDB() (*sql.DB, error) {
 
 // InsertMessage fügt eine neue Nachricht in die Datenbank ein.
 func InsertMessage(msg Message) error {
+	log.Println("Hier!!")
 	query := `INSERT INTO messages (sender_id, content, timestamp) VALUES ($1, $2, $3)`
 	_, err := db.Exec(query, msg.SenderID, msg.Content, time.Now())
 	return err
@@ -64,6 +66,27 @@ func GetMessages() ([]Message, error) {
 
 	return messages, nil
 }
+
+func GetMessagesSince(timestamp time.Time) ([]Message, error) {
+	query := `SELECT sender_id, content, timestamp FROM messages WHERE timestamp > $1 ORDER BY timestamp ASC`
+	rows, err := db.Query(query, timestamp)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var messages []Message
+	for rows.Next() {
+		var msg Message
+		if err := rows.Scan(&msg.SenderID, &msg.Content, &msg.Timestamp); err != nil {
+			return nil, err
+		}
+		messages = append(messages, msg)
+	}
+
+	return messages, nil
+}
+
 
 func InsertUser(user User) error {
 	// Passwort hashen
@@ -91,4 +114,14 @@ func ValidateUser(username, password string) (bool, error) {
 		return false, nil
 	}
 	return true, nil
+}
+
+func GetUsernameByID(userID int) string {
+	var username string
+	err := db.QueryRow(`SELECT username FROM users WHERE id = $1`, userID).Scan(&username)
+	if err != nil {
+		log.Printf("Fehler beim Abrufen des Benutzernamens für ID %d: %v", userID, err)
+		return "Unbekannt"
+	}
+	return username
 }

@@ -1,11 +1,11 @@
 SELECT 
-    m.message_id,
+    m.id,
     u.username AS sender,
     m.content,
     m.timestamp
 FROM 
     messages m
 JOIN 
-    users u ON m.sender_id = u.user_id
+    users u ON m.sender_id = u.id
 ORDER BY 
     m.timestamp;

@@ -37,20 +37,17 @@ func main() {
 	flag.IntVar(&port, "port", 8080, "port to listen on")
 	flag.Parse()
 
-	// Mux erstellen und Routen registrieren
-	mux := http.NewServeMux()
-	mux.Handle("/", http.FileServer(http.Dir("./frontend")))
-	mux.HandleFunc("POST /api/create/user", HandleCreateUser)
-	mux.HandleFunc("POST /api/new/message", HandleCreateMessage)
-	mux.HandleFunc("GET /api/get/message", HandleGetMessages)
-	mux.HandleFunc("POST /api/login", HandleLogin)
-	mux.HandleFunc("GET /api/events", HandleEvents)
+	// Routen definieren
+	http.Handle("/", http.FileServer(http.Dir("./frontend")))
+	http.HandleFunc("POST /api/create/user", HandleCreateUser)
+	http.HandleFunc("POST /api/new/message", HandleCreateMessage)
+	http.HandleFunc("GET  /api/get/message", HandleGetMessages)
+	http.HandleFunc("POST /api/login", HandleLogin)
+	http.HandleFunc("/api/events", HandleEvents)
 
-	// Logging-Middleware anwenden
-	loggedMux := LoggerMiddleware(mux)
-
+	// Server starten
 	log.Printf("Web Server listening on http://localhost:%d", port)
-	if err := http.ListenAndServe(fmt.Sprintf(":%d", port), loggedMux); err != nil {
+	if err := http.ListenAndServe(fmt.Sprintf(":%d", port), nil); err != nil {
 		log.Fatal(err)
 	}
 }
