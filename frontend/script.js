@@ -56,7 +56,7 @@ const Utils = (() => {
     chatMessages.scrollTop = chatMessages.scrollHeight;
   }
 
-  // Exponiere die Funktion appendMessageToChat, damit sie außerhalb des Moduls verwendet werden kann
+  // Exportieren die Funktion appendMessageToChat, damit sie außerhalb des Moduls verwendet werden kann
   return { appendMessageToChat };
 })();
 
@@ -103,7 +103,7 @@ const API = (() => {
     });
   }
 
-  // Exponiere die Funktionen für externe Nutzung
+  // Exportieren die Funktionen für externe Nutzung
   return { registerUser, loginUser, sendMessage };
 })();
 
@@ -129,7 +129,7 @@ const SSE = (() => {
     };
   }
 
-  // Exponiere die Funktion connectToEvents
+  // Exportieren die Funktion connectToEvents
   return { connectToEvents };
 })();
 
@@ -165,7 +165,7 @@ const UI = (() => {
     SSE.connectToEvents(); // Verbindung zu SSE herstellen
   }
 
-  // Exponiere die Funktionen für externe Nutzung
+  // Exportieren die Funktionen für externe Nutzung
   return { showRegister, showLogin, switchToChat };
 })();
 
@@ -256,7 +256,7 @@ const EventHandler = (() => {
     UI.showRegister();
   }
 
-  // Exponiere die Funktion initialize
+  // Exportieren die Funktion initialize
   return { initialize };
 })();
 

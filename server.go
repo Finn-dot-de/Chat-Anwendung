@@ -41,9 +41,8 @@ func main() {
 	http.Handle("/", http.FileServer(http.Dir("./frontend")))
 	http.HandleFunc("POST /api/create/user", HandleCreateUser)
 	http.HandleFunc("POST /api/new/message", HandleCreateMessage)
-	http.HandleFunc("GET  /api/get/message", HandleGetMessages)
 	http.HandleFunc("POST /api/login", HandleLogin)
-	http.HandleFunc("/api/events", HandleEvents)
+	http.HandleFunc("GET /api/events", HandleEvents)
 
 	// Server starten
 	log.Printf("Web Server listening on http://localhost:%d", port)
